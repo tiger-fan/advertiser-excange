@@ -1,0 +1,29 @@
+<% content_for :sidebar do %>
+  <div data-hook="homepage_sidebar_navigation">
+    <%= render :partial => 'spree/shared/taxonomies' %>
+  </div>
+<% end %>
+<link rel="stylesheet" href="/assets/store/style.css">
+<nav class="row gray2">
+	<div class="columns ten pull-left" style="color:white;">
+		<p class="ft40px">
+		REDAY TO TAG LINE HERE?
+		</p>
+		<p class="ft24px">SUBTEXT LINE GOES HERE</p>
+	</div>
+	<div class="columns two" style="padding-top:50px;">
+		<a href="#" class="btn-large btn-u hover-effect strong">CONTACT US</a>
+	</div>
+</nav>
+<%= render :partial => 'spree/shared/map_layer' %>
+<nav data-hook="homepage_contacts">
+  <%= render :partial => 'spree/shared/contacts'%>
+</nav>
+
+<div class="gray2">
+		<br>
+		<p class="ft44px" style="text-align: center;">“ROTATING TESTIMONIALS + PRESS”</p>
+		<p class="ft20px" style="text-align: right; margin-right: 40px;">-ANONYMOUS</p>
+		<br>
+</div>
+<br><br><br><br><br><br>

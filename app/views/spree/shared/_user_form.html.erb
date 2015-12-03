@@ -1,0 +1,21 @@
+  <%= f.input :first_name, label: 'First Name', :class => 'title', autofocus: true, required: true %>
+
+  <%= f.input :last_name, label: 'Last Name', :class => 'title', required: true %>
+
+  <%= f.input :company, :class => 'title', required: true %>
+
+  <%= f.input :phone, :class => 'title' %>
+
+  <%= f.input :email, :class => 'title', required: true %>
+
+<div id="password-credentials">
+  <p>
+    <%= f.input :password, :class => 'title', required: true %>
+  </p>
+
+  <p>
+    <%= f.input :password_confirmation, label: 'Password Confirmation', :class => 'title', required: true %>
+  </p>
+</div>
+
+<div data-hook="signup_below_password_fields"></div>

@@ -1,0 +1,12 @@
+<%= simple_form_for Spree::User.new, :as => :spree_user, :url => spree.create_new_session_path do |f| %>
+  <div id="password-credentials">
+    <%= f.input :email, html: {:class => 'title', :tabindex => 1} %>
+    <%= f.input :password, html: {:class => 'title', :tabindex => 2} %>
+  </div>
+  <label>
+    <%= f.check_box :remember_me %>
+    <span class="remember-me"><%= Spree.t(:remember_me) %></span>
+  </label>
+  <br>
+  <p><%= f.submit Spree.t(:login), :class => 'btn btn-large login-button', :tabindex => 3 %></p>
+<% end %>

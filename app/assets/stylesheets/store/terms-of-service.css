@@ -1,0 +1,83 @@
+#terms-of-service span, #privacy-policy span
+{
+	color: #606060;	
+}
+
+#terms-of-service span.ft9, #privacy-policy span.ft9
+{
+	font-size: 9pt;
+}
+
+#terms-of-service span.ft10, #privacy-policy span.ft10
+{
+	font-size: 10pt;
+}
+
+#terms-of-service span.ft15, #privacy-policy span.ft15
+{
+	font-size: 15pt;
+}
+
+#terms-of-service ul, #privacy-policy ul
+{
+	margin-left: 30px;
+	list-style-position: outside;
+	list-style-type: decimal;
+}
+
+#terms-of-service ul > li, #privacy-policy ul > li
+{
+	padding-left: 10px;
+	margin: 5px 0;
+}
+#terms-of-service p, #privacy-policy p{
+	line-height: 15pt;
+	font-size: 10pt;
+}
+
+#terms-of-service a, #privacy-policy a
+{
+	text-decoration: none;
+}
+
+#terms-of-service p.subtitle, #privacy-policy p.subtitle
+{
+	margin-top: 20.25px;
+	margin-right: 0in;
+	margin-bottom: 6.75pt;
+	margin-left: 0in;
+	font-size: 15pt;
+}
+#terms-of-service p.heading1, #privacy-policy p.heading1
+{
+	font-size: 11pt;
+	font-weight: bold;
+	margin-top: 12px;
+	margin-bottom: 10px;
+}
+
+#terms-of-service p.title, #privacy-policy p.title
+{
+	font-size: 22.5pt;
+	color: #333;
+	margin-bottom:27.0pt;
+	line-height:normal;
+}
+#contact-us .well
+{
+	background-color: #f0f0f0;
+}
+.padding-20
+{
+	padding: 20px;
+}
+
+#contact-us img{
+	margin-right: 20px;
+}
+
+#contact-us textarea
+{
+	width: 350px;
+	height: 150px;
+}

@@ -1,0 +1,98 @@
+<%
+  paginated_products = @searcher.retrieve_products if params.key?(:keywords)
+  paginated_products ||= products
+%>
+
+<% if products.empty? %>
+  <div class="alert alert-info">
+    <h5>No Retailers Found. Please Try Again or Check Back Shortly, Thanks</h5>
+  </div>
+<% elsif params.key?(:keywords) %>
+  <h6 class="search-results-title"><%= Spree.t(:search_results, :keywords => h(params[:keywords])) %></h6>
+<% end %>
+
+<% if products.any? %>
+  <% first_three = products.take(3) %>
+  <% other_products = products[3..(products.length-1)] %>
+
+  <ul id="products" class="inline product-listing">
+    <% first_three.each do |product| %>
+      <%= render partial: 'spree/shared/side_product', locals: { product: product} %>
+    <% end %>    
+  </ul>
+
+  <% if other_products %>
+    <div id="product-detail-list" class="columns eleven">
+      <% other_products.each do |product| %>
+        <ul id="products" class="inline product-listing" data-hook>
+          <li id="product_<%= product.id %>" style="width:90%" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+            <div class="row-fluid">
+              <div class="span5 product-image">
+                <%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
+              </div>
+              <div class="span7">
+                <h3><%= link_to truncate(product.name, :length => 50), product, :itemprop => "name", :title => product.name %></h3>
+                <div data-hook="product_properties">
+                  <% @product_properties = product.product_properties %>
+                  <%= render :partial => '/spree/products/properties' %>
+                </div>
+                <div class="row-fluid price text-center" itemprop="price">
+                  <div class="span6"><%= display_price(product) %></div>
+                  <div class="span6">
+                    <%= link_to 'Check Availability', product, :class => 'btn btn-warning', :itemprop => "name", :title => product.name %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+      <% end %>
+    </div>
+  <% end %>
+  
+<% end %>
+<% reset_cycle("classes") %>
+
+<% if paginated_products.respond_to?(:num_pages) %>
+  <%= paginate paginated_products %>
+<% end %>
+
+<% if @products.length > 3 %>
+  </div> <!-- End Product Detail List Div Tag -->
+  <!-- Side bar -->
+  <div id="product-sidebar" class="columns four visible-desktop">
+    <h4>You may also need</h4>
+    <ul>
+      <li>
+        <a>Get your credit card score</a>
+        <p>Know your credit score before you find a new retailer.</p>
+      </li>
+      <li>
+        <a>Get Moving quotes</a>
+        <p>Compare cost of top moving companies, movers and services.</p>
+      </li>
+      <li>
+        <a>Repair your credit</a>
+        <p>Improve Your Credit Score with a FREE Credit Repair Consultation.</p>
+      </li>
+    </ul>
+  </div>
+  <div id="product-sidebar" class="columns three visible-tablet" style="width:163px;">
+    <h4>You may also need</h4>
+    <ul>
+      <li>
+        <a>Get your credit card score</a>
+        <p>Know your credit score before you find a new retailer.</p>
+      </li>
+      <li>
+        <a>Get Moving quotes</a>
+        <p>Compare cost of top moving companies, movers and services.</p>
+      </li>
+      <li>
+        <a>Repair your credit</a>
+        <p>Improve Your Credit Score with a FREE Credit Repair Consultation.</p>
+      </li>
+    </ul>
+  </div>
+  <!-- End Side bar -->
+<% end %>

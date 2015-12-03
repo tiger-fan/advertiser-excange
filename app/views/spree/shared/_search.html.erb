@@ -1,0 +1,201 @@
+<div class="navbar">
+  <div class="navbar-inner">
+    <div class="center span7">
+      <a data-target=".navbar-responsive-collapse" data-toggle="collapse" class="btn btn-navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <div class="nav-collapse collapse navbar-responsive-collapse">
+        <%= form_for :query, url: "/#{cookies[:theme]}", html: {method: :get, :class => 'form-horizontal', id: 'query' } do |f| %>
+        <div id="search">
+          <div class="input-append">
+            <%= text_field_tag :address, @query.nil? ? "" : @query[:address], :placeholder => 'Input Address, Zipcode', style: "width:160px;" %>
+            <%= hidden_field_tag :country, @query.nil? ? "" : @query[:country] %>
+            <%= hidden_field_tag :state, @query.nil? ? "" : @query[:state] %>
+            <%= hidden_field_tag :city, @query.nil? ? "" : @query[:city] %>
+            <%= hidden_field_tag :zipcode, @query.nil? ? "" : @query[:zipcode] %>
+            <button class="btn-u btn-search" id="btn-locate" type="button" autofocus=true><i class="icon-search"></i></button>
+            <img id="spinner" class="hide" src="/assets/spinner.gif">
+          </div>
+        </div>
+        <ul class="nav text-left">
+        	<!-- Price Search -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Price <b class="caret"></b></a>
+            <div class="dropdown-menu">
+            	<div style="width: 220px; padding:10px 20px">
+                <p>
+                  <label for="amount">Price range:</label>
+                  <input type="text" id="amount" style="border: 1; color: #f6931f; font-weight: bold; padding-bottom: 2px;" />
+                  <%= hidden_field_tag :min_price %>
+                  <%= hidden_field_tag :max_price %>
+                  <button type="button">Search</button>
+                </p>
+                <br>
+                <div id="slider-price"></div>
+            	</div>
+            </div>
+          </li><!--/Price Search-->
+        	<!-- Size -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Size <b class="caret"></b></a>
+            <div class="dropdown-menu">
+            	<div style="width: 150px; padding:10px 20px">
+                <p>
+                  <label for="width">Width:</label>
+                  <input type="text" id="width" style="border: 1; color: #f6931f; font-weight: bold; margin-bottom: 10px;" />
+                  <%= hidden_field_tag :min_width %>
+                  <%= hidden_field_tag :max_width %>
+                </p>
+                <div id="slider-width"></div>
+                <br>
+                <p>
+                  <label for="height">Height:</label>
+                  <input type="text" id="height" style="border: 1; color: #f6931f; font-weight: bold; margin-bottom: 10px;" />
+                  <%= hidden_field_tag :min_height %>
+                  <%= hidden_field_tag :max_height %>
+                </p>
+                <div id="slider-height"></div>
+                <br>
+                <button type="button">Search</button>
+            	</div>
+            </div>
+          </li><!--/Size Search-->
+          <!-- Type Search -->
+          <li class="dropdown">
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#">Type <b class="caret"></b></a>
+            <div class="dropdown-menu">
+            	<div id="div-search-type" class="row-fluid">
+            		<div class="span12">
+            			<ul>
+                  <% 
+                  taxons = Spree::Taxon.order("taxonomy_id ASC").where(taxonomy_id: 1)
+                  %>
+									<% 
+                    taxons.each do |taxon|
+                    next if taxon.id == 1
+                    hirachy = 0
+                    parent = taxons.find_by_id(taxon.parent_id)
+                    while !parent.nil?
+                      parent = taxons.find_by_id(parent.parent_id)
+                      hirachy = hirachy + 1
+                    end
+                  %>
+							      	<li id="<%= taxon.id %>" style="display:block;"><a><%= taxon.name.humanize.rjust(taxon.name.size + hirachy * 24, '&nbsp;').html_safe %></a></li>
+						    	<% end %>
+                  <%= hidden_field_tag :taxon_id %>
+						    	</ul>
+            		</div>
+            	</div>
+            </div>
+          </li><!--/Type Search-->
+        </ul>
+        <% end %>
+        <div class="btn-group pull-left">
+          <%= link_to "  List  ", "/list", :class => params[:action] == "index" ? "btn btn-success" : "btn btn-warning" %>
+          <%= link_to "  Photos  ", "/photos", :class => params[:action] == "photos" ? "btn btn-success" : "btn btn-warning" %>
+          <%= link_to "  Map  ", "/map", :class => params[:action] == "map" ? "btn btn-success" : "btn btn-warning" %>
+          <%= link_to "Campaign", "/campaigns/new", class: params[:action] == "campaign" ? "btn btn-success" : "btn btn-warning" %>
+		    </div>
+      </div><!-- /.nav-collapse -->
+    </div>
+  </div><!-- /navbar-inner -->
+</div>
+
+<!-- This sets the slider's initial value -->
+<%
+  min_price = 0
+  max_price = 500
+  min_width = 0
+  max_width = 500
+  min_height = 0
+  max_height = 500
+
+  min_price = @query[:min_price].to_i unless @query.nil?
+  max_price = @query[:max_price].to_i unless @query.nil?
+
+  min_width = @query[:min_width].to_i unless @query.nil?
+  max_width = @query[:max_width].to_i unless @query.nil?
+
+  min_height = @query[:min_height].to_i unless @query.nil?
+  max_height = @query[:max_height].to_i unless @query.nil?  
+
+  max_price = 500 if max_price == 0
+  max_width = 500 if max_width == 0
+  max_height = 500 if max_height == 0
+
+%>
+<script type="text/javascript">
+  $('.dropdown-toggle').dropdown();
+  $('.dropdown-menu').click(function(event){
+    event.stopPropagation();
+  });
+
+  $(function() {
+
+    // Price range slider
+    $( "#slider-price" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ <%= min_price %>, <%= max_price %> ],
+      slide: function( event, ui ) {
+        $( "#amount" ).val( "$" + ui.values[0] + " - $" + ui.values[1] );
+        $( "#min_price" ).val( ui.values[0] );
+        $( "#max_price" ).val( ui.values[1] );
+      }
+    });
+    $( "#amount" ).val( "$" + $( "#slider-price" ).slider( "values", 0 ) +
+      " - $" + $( "#slider-price" ).slider( "values", 1 ) );
+
+    // Width range slider
+    $( "#slider-width" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ <%= min_width %>, <%= max_width %> ],
+      slide: function( event, ui ) {
+        $( "#width" ).val( ui.values[0] + "m - " + ui.values[1] + "m" );
+        $( "#min_width" ).val( ui.values[0] );
+        $( "#max_width" ).val( ui.values[1] );
+      }
+    });
+    $( "#width" ).val($( "#slider-width" ).slider( "values", 0 ) +
+      "m - " + $( "#slider-width" ).slider( "values", 1 ) + "m" );
+
+    // Height range slider
+    $( "#slider-height" ).slider({
+      range: true,
+      min: 0,
+      max: 500,
+      values: [ <%= min_height %>, <%= max_height %> ],
+      slide: function( event, ui ) {
+        $( "#height" ).val( ui.values[0] + "m - " + ui.values[1]  + "m" );
+        $( "#min_height" ).val( ui.values[0] );
+        $( "#max_height" ).val( ui.values[1] );
+      }
+    });
+    $( "#height" ).val($( "#slider-height" ).slider( "values", 0 ) +
+      "m - " + $( "#slider-height" ).slider( "values", 1 ) + "m" );
+
+  });
+
+  $('#div-search-type li').click(function(event)
+  {
+    $("#div-search-type li").removeClass('active');
+    $(this).addClass('active');
+    $('#taxon_id').val($(this).attr('id'))
+    $('#query').submit()
+  })
+
+  $('#address').on("keyup", function(evt){
+    console.log(evt);
+    if (evt.keyCode == 13)
+      $('#btn-locate').click();
+  });
+
+  $('#query li button').click(function(){
+    $('#query').submit();
+  });
+</script>

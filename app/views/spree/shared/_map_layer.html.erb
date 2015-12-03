@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css">
+<link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">
+<link rel="stylesheet" href="/assets/store/esri-style.css">
+
+<script>
+  var dojoConfig = { 
+    parseOnLoad: false,
+    packages: [{
+      "name": "extras",
+      "location": "/assets/store/extras"
+    }]
+  };
+</script>
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+<script src="/assets/store/arcgis.js"></script>
+<!-- Map Layer -->
+<div class="row" style="position:relative;" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design:'headline',gutters:false">
+  <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'" parseOnLoad = "false">
+  </div>
+  <div id="search_result" class="alert alert-success span8">
+    <h5></h5>
+  </div>
+</div> <!--/Map Layer-->
+<%= render "spree/shared/census_searchbar" %>
+
+
+<script type="text/javascript">
+$(window).resize(function() {
+  var map = $('#map');
+  var header_height = $('header').height();
+  var window_height = $(window).height();
+  var margin_bottom = 42;
+  map.height(window_height - header_height - margin_bottom);
+});
+
+$(document).ready(function ()
+{
+  var map = $('#map');
+  var header_height = $('header').height();
+  var window_height = $(window).height();
+  var margin_bottom = 42;
+  map.height(window_height - header_height - margin_bottom);
+});
+
+</script>

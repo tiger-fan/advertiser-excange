@@ -1,0 +1,96 @@
+<% unless @product_properties.empty? %>
+<div class="pull-left margin-left10">
+  <h6 class="product-section-title"> Demographics</h6>
+  <table id="demographics" class='table-striped table-bordered'>
+	</table>
+</div>
+<div class="pull-left margin-left10">
+  <h6 class="product-section-title"> Annual Household Retail Spend</h6>
+	<table id="retails" class='table-striped table-bordered'>
+
+	</table>
+</div>
+<% coord = get_coordinate(@product_properties) %>
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+<script type="text/javascript">
+require(["esri/tasks/query", "esri/tasks/QueryTask", "esri/geometry/Multipoint", "esri/SpatialReference"],
+
+function(Query, QueryTask, Multipoint, SpatialReference) {
+
+	queryInitTask = new QueryTask("http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Median_Household_Income/MapServer/1");
+	queryRetailTask = new QueryTask("http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Retail_Spending_Potential/MapServer/1");
+
+	query = new Query();
+	var mp = new Multipoint(new SpatialReference({wkid:4326}));
+	query.returnGeometry = false;
+	initialize();
+	var outputFields = {
+			"TOTPOP_CY" : "Total Population", 
+			"MEDHINC_CY": "Median Household Income",
+			"HINCBASECY": "Households",
+			"X15001_A"	: "Retail Goods",
+			"RetailSpending_pct_USAvg": "Percent Above or Below U.S.Average"
+	};
+	function initialize()
+	{
+		query.outFields = ["TOTPOP_CY", "MEDHINC_CY", "HINCBASECY"];
+		// Fetch output fields and push to query.outFields
+
+		lon = "<%= coord[:longitude] unless coord.nil? %>";
+		lat = "<%= coord[:latitude] unless coord.nil? %>";
+
+		mp.points = [];
+		mp.points.push([lon, lat]);
+		query.geometry = mp;
+		query.outSpatialReference = {"wkid":102100};
+
+		//execute query
+		queryInitTask.execute(query, showCensusData);
+
+		// query Retail information
+		query.outFields = ["X15001_A", "RetailSpending_pct_USAvg"];
+		queryRetailTask.execute(query, showRetailInfo);
+	}
+
+	function showCensusData(results)
+	{
+		var census_table = "";
+		var featureAttributes = results.features[0].attributes;
+		for (att in featureAttributes) {
+			if (att == "MEDHINC_CY") // Price Field
+			{
+				census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>$" + addCommas(parseInt(featureAttributes[att])) + "</td></tr>";
+			}
+			else
+				census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>" + addCommas(parseInt(featureAttributes[att])) + "</td></tr>";
+	  }
+	  $("#demographics").html(census_table);
+	}
+	function showRetailInfo(results)
+	{
+		var census_table = "";
+		var featureAttributes = results.features[0].attributes;
+		var fieldAliases = results.fieldAliases;
+		for (att in featureAttributes) {
+			if (att == "X15001_A")
+				census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>$" + addCommas(parseInt(featureAttributes[att])) + "</td></tr>";
+			else // Price
+				census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>" + featureAttributes[att].replace('above', '') + "</td></tr>";
+	  }
+	  $("#retails").html(census_table);
+	}
+
+	function addCommas(nStr) {
+    nStr += '';
+    var x = nStr.split('.');
+    var x1 = x[0];
+    var x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+	}
+});
+</script>
+<% end %>

@@ -1,0 +1,13 @@
+<% unless @product_properties.empty? %>  
+  <h6 class="product-section-title"> <%= Spree.t('properties')%></h6>
+  <table style="width:100%;" class="table-striped table-bordered" data-hook>
+    <tbody>
+      <% @product_properties.each do |product_property| %>
+        <tr>
+          <td><strong><%= product_property.property.presentation %></strong></td>
+          <td><%= product_property.value %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

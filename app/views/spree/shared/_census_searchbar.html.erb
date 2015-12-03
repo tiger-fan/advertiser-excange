@@ -1,0 +1,165 @@
+<div id="accordion">
+  <div>
+    <h3>Males</h3>
+    <div id="div-men">
+      <div class="input-append">
+        <input type="text" id="male_age" />
+        <%= hidden_field_tag :min_male_age %>
+        <%= hidden_field_tag :max_male_age %>
+        <button class="btn-search" id="btn-male-search" type="button">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+      <br>
+      <div id="slider-male"></div>
+      <br>
+    </div>
+  </div>
+  <div>
+    <h3>Females</h3>
+    <div id="div-women">
+      <div class="input-append">
+        <input type="text" id="female_age"/>
+        <%= hidden_field_tag :min_female_age %>
+        <%= hidden_field_tag :max_female_age %>
+        <button class="btn-search" id="btn-female-search" type="button">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+      <br>
+      <div id="slider-female"></div>
+      <br>
+    </div>
+  </div>
+  <div>
+    <h3>Ethnicity</h3>
+    <div id="div-race">
+      <ul>
+      <% ["WHITE", "ASIAN", "BLACK", "HISPANIC", "OTHER"].each do |race| %>
+          <li><%= race.humanize %></li>
+      <% end %>
+      </ul>
+      <%= hidden_field_tag :race %>
+      <br>
+    </div>
+  </div>
+  <div>
+    <h3>Income</h3>
+    <div id="div-income">
+      <div class="input-append">
+        <input type="text" id="income" />
+        <%= hidden_field_tag :min_income %>
+        <%= hidden_field_tag :max_income %>
+        <button class="btn-u btn-search" id="btn-income-search" type="button">
+          <i class="icon-search"></i>
+        </button>
+      </div>
+      <br>
+      <div id="slider-income"></div>
+      <br>
+    </div>
+  </div>
+</div>
+
+<%
+  min_male_age    = 0
+  min_female_age  = 0
+  min_income      = 0
+  max_male_age    = 0
+  max_female_age  = 0
+  max_income      = 0
+
+  min_male_age    = @query[:min_male_age].to_i unless @query.nil?
+  max_male_age    = @query[:max_male_age].to_i unless @query.nil?
+
+  min_female_age  = @query[:min_female_age].to_i unless @query.nil?
+  max_female_age  = @query[:max_female_age].to_i unless @query.nil?
+
+  min_income      = @query[:min_income].to_i unless @query.nil?
+  max_income      = @query[:max_income].to_i unless @query.nil?  
+
+  max_male_age    = 5 if max_male_age == 0
+  max_female_age  = 5 if max_female_age == 0
+  max_income      = 8 if max_income == 0
+
+%>
+
+<script type="text/javascript">
+  var ages = ["Age 22", "Age 30", "Age 40", "Age 50", "Age 65", "Age 65+"];
+  var incomes = ["Poor", "$25,000","$50,000","$75,000","$100,000", "$150,000", "$200,000", "Rich"];
+
+  $(function() {
+    $("#accordion > div").accordion({ header: "h3", collapsible: true, active: false });
+
+    // ---------------Males population range slider--------------
+    $( "#slider-male" ).slider({
+      range: true,
+      min: 0,
+      max: 5,
+      values: [ <%= min_male_age %>, <%= max_male_age %> ],
+      slide: function( event, ui ) {
+        if (ui.values[0] == ui.values[1])
+        {
+          if (ui.handle == 0)
+            values = ui.values[0] - 1;
+          else
+            values = ui.values[0] + 1;
+          return false;
+        }
+
+        $( "#male_age" ).val( ages[ui.values[0]] + " ~ " + ages[ui.values[1]] );
+        $( "#min_male_age" ).val( ui.values[0] );
+        $( "#max_male_age" ).val( ui.values[1] );
+      }
+    });
+    $( "#male_age" ).val( ages[$( "#slider-male" ).slider( "values", 0 )] +
+      " - " + ages[$( "#slider-male" ).slider( "values", 1 )] );
+
+    // ----------------Females population range slider-------------
+    $( "#slider-female" ).slider({
+      range: true,
+      min: 0,
+      max: 5,
+      values: [ <%= min_female_age %>, <%= max_female_age %> ],
+      slide: function( event, ui ) {
+        if (ui.values[0] == ui.values[1])
+        {
+          if (ui.handle == 0)
+            values = ui.values[0] - 1;
+          else
+            values = ui.values[0] + 1;
+          return false;
+        }
+        $( "#female_age" ).val( ages[ui.values[0]] + " ~ " + ages[ui.values[1]] );
+        $( "#min_female_age" ).val( ui.values[0] );
+        $( "#max_female_age" ).val( ui.values[1] );
+      }
+    });
+    $( "#female_age" ).val( ages[$( "#slider-female" ).slider( "values", 0 )] +
+      " - " + ages[$( "#slider-female" ).slider( "values", 1 )] );
+
+    // ---------------Income range slider--------------
+    $( "#slider-income" ).slider({
+      range: true,
+      min: 0,
+      max: 7,
+      values: [ <%= min_income %>, <%= max_income %> ],
+      slide: function( event, ui ) {
+        if (ui.values[0] == ui.values[1])
+        {
+          if (ui.handle == 0)
+            values = ui.values[0] - 1;
+          else
+            values = ui.values[0] + 1;
+          return false;
+        }
+        $( "#income" ).val( incomes[ui.values[0]] + " ~ " + incomes[ui.values[1]] );
+        $( "#min_income" ).val( ui.values[0] );
+        $( "#max_income" ).val( ui.values[1] );
+      }
+    });
+    $( "#income" ).val( incomes[$( "#slider-income" ).slider( "values", 0 )] +
+      " - " + incomes[$( "#slider-income" ).slider( "values", 1 )] );
+
+  })
+</script>

@@ -1,0 +1,58 @@
+<% unless @product_properties.empty? %>  
+  <h6 class="product-section-title">Demographics</h6>
+  <table id="demographics" class='table-hover'><tbody>
+
+	</table>
+<% end %>
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+<script type="text/javascript">
+dojo.require("esri/tasks/query");
+dojo.require("esri/tasks/QueryTask");
+dojo.require("esri/geometry/Multipoint");
+dojo.require("esri/SpatialReference");
+
+var outputFields = {
+		"TOTPOP_CY" : "Total Population", 
+		"MEDHINC_CY": "Median Income",
+		"HINCBASECY": "Households",
+		"HINC25_CY" : "Household Income $0-$24,999",
+		"HINC25_50_CY": "Household Income $25,000-$49,999",
+		"HINC50_CY"	: "Household Income $50,000-$74,999",
+		"HINC75_CY" : "Household Income $75,000-$99,999",
+		"HINC100_CY": "Household Income $100,000-$149,999",
+		"HINC150_CY": "Household Income $150,000-$199,999",
+		"HINC200_CY": "Household Income $200,000 or greater"
+	};
+$(function(){
+	queryInitTask = new QueryTask("http://server.arcgisonline.com/ArcGIS/rest/services/Demographics/USA_Median_Household_Income/MapServer/1");
+
+	// Fetch output fields and push to query.outFields
+	for (att in outputFields) {
+		query.outFields.push(att);
+	}
+	lon = "<%= @product_properties.find_by_name(:longitude).value %>"
+	lat = "<%= @product_properties.find_by_name(:latitiude).value %>"
+
+	mp.points = [];
+	var length = data.length;
+	for ( var i = 0; i < length; i++) {
+		mp.points.push(lon, lat]);
+	}
+	query.geometry = mp;
+	query.outSpatialReference = {"wkid":102100};
+	//execute query
+	queryInitTask.execute(query, initializeData);
+});
+function initializeData(results)
+{
+	var census_table = "";
+	var featureAttributes = results.features[i].attributes;
+	for (att in featureAttributes) {
+		if (att == "TOTPOP_CY" || att == "HINCBASECY")
+			census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>" + featureAttributes[att] + "</td></tr>";
+		else
+			census_table += "<tr><td><strong>" + outputFields[att] + "</strong></td><td>$" + featureAttributes[att] + "</td></tr>";
+  }
+  $("#demographics").html(census_table);
+}
+</script>

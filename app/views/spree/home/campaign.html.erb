@@ -1,0 +1,119 @@
+
+<div class="inline product-listing" id="campaign-form">
+  <h2>CAMPAIGN</h2>
+  <%= form_for :campaign, html: {class: "form-horizontal", id: "campaign"} do |f| %>
+    <p>
+      <%= f.label :state, "State:" %>
+      <%= f.select :state, options_for_select(us_states)  %>
+    </p>
+    <p style="width:">
+      <%= f.label :ad_width, "Ad Width:" %>
+      <%= f.text_field :ad_width, class: "slider-receiver" %>
+      <%= hidden_field_tag :min_width %>
+      <%= hidden_field_tag :max_width %>
+    </p>
+    <div id="slider-adwidth" class="slider-campaign"></div>
+    <p>
+      <%= f.label :ad_height, "Ad Height:" %>
+      <%= f.text_field :ad_height, class: "slider-receiver" %>
+      <%= hidden_field_tag :min_height %>
+      <%= hidden_field_tag :max_height %>
+    </p>
+    <div id="slider-adheigth" class="slider-campaign"></div>
+    <p>
+      <%= f.label :counter_top, "Counter Top Only" %> <%= f.check_box :counter_top %>
+    </p>
+
+    <p>
+      <%= f.label :budget, "Budget:" %>
+      <%= f.text_field :budget, class: "slider-receiver" %>
+      <%= hidden_field_tag :min_budget %>
+      <%= hidden_field_tag :max_budget %>
+    </p>
+    <div id="slider-budget" class="slider-campaign"></div>
+    <p>
+      <label><strong>RETAILERS</strong></label>
+      <%= f.text_field :retailers_count, class: "slider-receiver" %>
+    </p>
+    <p>
+      <label><strong>Total Ad SQ/FT</strong></label>
+      <%= f.text_field :total_ad_sq_ft, class: "slider-receiver" %>
+    </p>
+
+    <%= f.submit "CREATE CAMPAIGN", :disable_with => 'Creating Campaign...' %>
+  <% end %>
+</div>
+
+
+
+<script type="text/javascript">
+  // Width range slider
+  $("#slider-adwidth" ).slider({
+    range: true,
+    min: 0,
+    max: 300,
+    values: [ 0, 300 ],
+    slide: function( event, ui ) {
+      $("#campaign_ad_width").val(ui.values[0] + "inches -" + ui.values[1] + "inches");
+      $("#min_width").val( ui.values[0] );
+      $("#max_width").val( ui.values[1] );
+      compute();
+    }
+  });
+  $("#campaign_ad_width").val( $("#slider-adwidth").slider("values", 0) + "inches -" + $("#slider-adwidth").slider("values", 1) + "inches");
+
+  // Height range slider
+  $("#slider-adheigth" ).slider({
+    range: true,
+    min: 0,
+    max: 300,
+    values: [ 0, 300 ],
+    slide: function( event, ui ) {
+      $("#campaign_ad_height").val(ui.values[0] + "inches -" + ui.values[1] + "inches");
+      $( "#min_height" ).val( ui.values[0] );
+      $( "#max_height" ).val( ui.values[1] );
+      compute();
+    }
+  });
+  $("#campaign_ad_height").val($( "#slider-adheigth" ).slider( "values", 0 ) + "inches -" + $("#slider-adheigth").slider("values", 1) + "inches");
+
+  // Budget range slider
+  $("#slider-budget").slider({
+    range: true,
+    min: 0,
+    max: 1000000,
+    values: [0, 1000000],
+    slide: function(event, ui) {
+      $("#campaign_budget").val( "$" + ui.values[0] + " - $" + ui.values[1]);
+      compute();
+    }
+  });
+  $( "#campaign_budget" ).val("$" + $("#slider-budget").slider("values", 0) + " - $" + $("#slider-budget").slider("values", 1));
+
+  // Compute retailers count and total ad square/foot
+  function compute() {
+    var budget = $( "#slider-budget" ).slider( "values", 0 );
+    var width = $( "#slider-adwidth" ).slider( "values", 0 );
+    var height = $( "#slider-adheigth" ).slider( "values", 0 );
+    var retailers_count = computeRetailers(width, height, budget);
+    $("#campaign_retailers_count").val(retailers_count);
+    var totalAdSqFt = computeTotalAdSqFt(retailers_count, width, height);
+    $("#campaign_total_ad_sq_ft").val(totalAdSqFt);
+  }
+
+  // compute the number of retailers according to ad dimension and budget
+  function computeRetailers(width, height, budget) {
+    // Retailers = Budget / (Ad Width * Ad Height) * $00.02
+    var retailers;
+    retailers = (budget / (width * height)) * 0.02;
+    return Math.round(retailers);
+  };
+
+  // compute the total ad area involved
+  function computeTotalAdSqFt(retailers, adWidth, adHeight) {
+    // Total Ad Sq Ft = Retailers * ((Ad Width * Ad Height)/12)
+    var total;
+    total = retailers * ((adWidth * adHeight)/12);
+    return total;
+  };
+</script>

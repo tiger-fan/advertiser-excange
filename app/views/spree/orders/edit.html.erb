@@ -1,0 +1,56 @@
+<% @body_id = 'cart' %>
+
+<h2>Advertising Buy</h2>
+
+<% if @order.line_items.empty? %>
+
+  <div data-hook="empty_cart">
+    <br>
+    <div class="alert alert-info">
+      <h5><%= Spree.t(:your_cart_is_empty) %></h5>
+    </div>
+    <p><%= link_to Spree.t(:continue_shopping), products_path, :class => 'btn-u btn-large continue' %></p>
+  </div>
+
+<% else %>
+  <div data-hook="outside_cart_form">
+    <%= form_for @order, :url => update_cart_path, :html => {:id => 'update-cart'} do |order_form| %>
+      <div data-hook="inside_cart_form">
+
+        <div data-hook="cart_items">
+          <%= render :partial => 'form', :locals => { :order_form => order_form } %>
+        </div>
+
+        <div id="subtotal" data-hook>
+          <div class="span1 pull-right" style="width: 50px;">
+            <h5 class="text-center"><span class="order-total"><%= @order.item_count %></span></h5>
+            <h5 class="text-center"><span class="order-total"><%= @order.display_total.to_html %></span></h5>
+          </div>
+          <div class="span1 pull-right" style="width: 50px;">
+            <h5>Months</h5>
+            <h5>Subtotal</h5>
+          </div>
+        </div>
+
+        <div class="links columns sixteen alpha omega" data-hook="cart_buttons">
+          <%= order_form.text_field :coupon_code, :size => 10, :placeholder => 'Priority Code', style: 'margin-top: 5px; margin-right:10px;' %>
+          <%= button_tag :class => 'btn-u btn-large', :id => 'update-button' do %>
+            <%= Spree.t(:update) %>
+          <% end %>
+          <%= button_tag :class => 'btn-u btn-large', :id => 'checkout-link', :name => 'checkout' do %>
+            Buy
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <br>
+  <div id="empty-cart" data-hook>
+    <%= form_tag empty_cart_path, :method => :put do %>
+      <p id="clear_cart_link" data-hook>
+        <%= link_to 'Continue Ad Buy', products_path, :class => 'btn-u btn-large' %>
+      </p>
+    <% end %>
+  </div>
+
+<% end %>

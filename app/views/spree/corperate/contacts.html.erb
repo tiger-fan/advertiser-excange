@@ -1,0 +1,40 @@
+<div id="contact-us" class="span10 center margin-top20">
+<div style="margin-top:50px">
+	<div class="row text-center">
+		<p style="font-size: 50px;"> CONTACT US</p>
+		<br>
+	</div>
+	<div class="row-fluid">
+		<div class="span6 padding-20 well">
+			<%= simple_form_for(:contacts, :html => {:class => 'form-vertical' }) do |f| %>
+				<%= f.input :name, required: true %>
+				<%= f.input :email, required: true %>
+				<%= f.input :company, required: true %>
+				<%= f.input :message, as: :text, required: true %>
+				<br>
+				<%= button_tag "Send", :class => "btn-u" %>
+			<% end %>
+		</div>
+		<div class="span3 padding-20 well">
+			<h5>
+				<img src="/assets/icn-email.png">
+				info@skurun.com
+			</h5>
+			<br>
+			<h5>
+				<img src="/assets/icn-phone.png">
+				&nbsp; (323) 963-3631
+			</h5>
+		</div>
+		<div class="span3 padding-20 well">
+			<h5>
+				<img src="/assets/icn-address.png">
+				119 West 9th Street
+			</h5>
+			<h5 style="padding-left: 38px;">
+				Los Angels CA, 90015
+			</h5>
+		</div>
+	</div>
+</div>
+</div>

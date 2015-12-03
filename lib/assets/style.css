@@ -1,0 +1,38 @@
+#map{
+  width: 100% !important;
+  height: 550px !important;
+}
+
+.esriPopup .contentPane
+{
+  background-color: #ffffff;
+  height: 400px;
+  overflow: hidden;
+}
+.titleButton.maximize
+{
+  visibility: hidden;
+}
+.esriPopup .titleButton.next{
+  right: 25px;
+}
+.esriPopup .titleButton.prev{
+  right: 36px;
+}
+.esriPopup .sizer {
+  width: 435px;
+  /*height: 400px;*/
+}
+.esriPopup a {
+    color: #F28037;
+    text-decoration: none;
+}
+
+.retailer_props_table
+{
+  border-width: 1px;
+  height: 230px;
+  width: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

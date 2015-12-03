@@ -1,0 +1,45 @@
+<%
+  paginated_products = @searcher.retrieve_products if params.key?(:keywords)
+  paginated_products ||= products
+%>
+
+<% if products.empty? %>
+  <div class="alert alert-info">
+    <!-- <h4>No retailers are found.</h4> -->
+    <h5>No Retailers Found. Please Try Again or Check Back Shortly, Thanks</h5>
+  </div>
+<% elsif params.key?(:keywords) %>
+  <h6 class="search-results-title"><%= Spree.t(:search_results, :keywords => h(params[:keywords])) %></h6>
+<% end %>
+
+<% if products.any? %>
+  <% first_three = products.take(3) %>
+  <% other_products = products[3..(products.length-1)] %>
+
+  <ul id="products" class="inline product-listing">
+    <% first_three.each do |product| %>
+      <%= render partial: 'spree/shared/side_product', locals: { product: product} %>
+    <% end %>    
+  </ul>
+
+  <% if other_products %>
+    <% other_products.in_groups_of(5,false).each do |group| %>
+      <ul id="products" class="inline product-listing" data-hook>
+        <% group.each do |product| %>
+          <li id="product_<%= product.id %>" class="columns three" data-hook="products_list_item" itemscope itemtype="http://schema.org/Product">
+            <div class="product-image">
+              <%= link_to small_image(product, :itemprop => "image"), product, :itemprop => 'url' %>
+            </div>
+            <%= link_to truncate(product.name, :length => 50), product, :class => 'info', :itemprop => "name", :title => product.name %>
+            <span class="price selling" itemprop="price"><%= display_price(product) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+<% end %>
+<% reset_cycle("classes") %>
+
+<% if paginated_products.respond_to?(:num_pages) %>
+  <%= paginate paginated_products %>
+<% end %>

@@ -1,0 +1,21 @@
+.slider-campaign {
+  width: 220px;
+  margin-top:10px;
+  margin-bottom:10px;
+}
+
+input.slider-receiver {
+  border: 1;
+  color: #f6931f;
+  font-weight: bold;
+  padding-bottom: 2px;
+}
+
+#campaign-form {
+  padding-left: 20px;
+  form#campaign {
+    p {
+      margin-bottom:10px;
+    }
+  }  
+}

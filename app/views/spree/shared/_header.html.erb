@@ -1,0 +1,10 @@
+<header id="header" class="" data-hook>
+	<div class="container">
+	  <%= render :partial => 'spree/shared/nav_bar' %>
+	</div>
+  <%= render :partial => 'spree/shared/main_nav_bar'%>
+  
+  <nav id="search-nav-bar">
+    <%= render :partial => 'spree/shared/search' if controller.controller_name == "home" %>
+  </nav>
+</header>

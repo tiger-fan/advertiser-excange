@@ -1,0 +1,69 @@
+<% address_id = address_type.chars.first %>
+<div class="control-group">
+  <%= form.label :firstname, Spree.t(:first_name), :class => "control-label" %>
+  <div class="controls">
+    <%= form.text_field :firstname, :class => 'required' %>
+  </div>
+</div>
+<div class="control-group">
+  <%= form.label :lastname, Spree.t(:last_name), :class => "control-label" %>
+  <div class="controls">
+    <%= form.text_field :lastname, :class => 'required' %>
+  </div>
+</div>
+<% if Spree::Config[:company] %>
+<div class="control-group">
+  <%= form.label :company, Spree.t(:company), :class => "control-label" %>
+  <div class="controls">
+      <%= form.text_field :company %>
+  </div>
+</div>
+<% end %>
+<div class="control-group" id=<%="#{address_id}address1" %>>
+  <%= form.label :address1, Spree.t(:street_address), :class => "control-label" %>
+  <div class="controls">
+    <%= form.text_field :address1, :class => 'required' %>
+  </div>
+</div>
+<div class="control-group" id=<%="#{address_id}address2" %>>
+  <%= form.label :address2, Spree.t(:street_address_2), class: "control-label" %>
+  <div class="controls">
+    <%= form.text_field :address2 %>
+  </div>
+</div>
+<div class="control-group" id=<%="#{address_id}city" %>>
+  <%= form.label :city, Spree.t(:city), :class => "control-label" %>
+  <div class="controls">
+    <%= form.text_field :city, :class => 'required' %>
+  </div>
+</div>
+<div class="control-group" id=<%="#{address_id}country" %>>
+  <%= form.label :country_id, Spree.t(:country), :class => "control-label" %>
+  <div class="controls">
+      <%= form.collection_select :country_id, available_countries, :id, :name, {}, {:class => 'required'} %>
+  </div>
+</div>
+
+<% if Spree::Config[:address_requires_state] %>
+  <div class="control-group" id=<%="#{address_id}state" %>>
+    <%= form.label :state, Spree.t(:state), :class => "control-label" %>
+    <div class="controls">
+      <%= form.collection_select(:state_id, address.country.states,
+                            :id, :name,
+                            {:include_blank => true},
+                            :class => 'required') %>
+    </div>
+  </div>
+<% end %>
+<div class="control-group" id=<%="#{address_id}zipcode" %>>
+  <%= form.label :zipcode, Spree.t(:zip), :class => "control-label" %>
+  <div class="controls">
+    <%= form.text_field :zipcode, :class => 'required' %>
+  </div>
+</div>
+<div class="control-group" id=<%="#{address_id}phone" %>>
+  <%= form.label :phone, Spree.t(:phone), :class => "control-label" %>
+  <div class="controls">
+    <%= form.phone_field :phone, :class => 'required' %>
+  </div>
+</div>

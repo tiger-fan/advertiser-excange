@@ -1,0 +1,78 @@
+<!doctype html>
+<html class="grunt-jasmine">
+<head>
+  <meta charset="utf-8">
+
+  <title>Example Map Spec Runner</title>
+  <!-- Add in the CSS so the map actually lays out in the DOM correctly -->
+  <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/dojo/dijit/themes/claro/claro.css"> 
+  <link rel="stylesheet" href="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/js/esri/css/esri.css">
+  <!-- <link rel="stylesheet" href="http://js.arcgis.com/3.6/js/esri/css/esri.css"> -->
+
+
+  <link rel="stylesheet" type="text/css" href=".grunt/grunt-contrib-jasmine/jasmine.css">
+
+
+<!-- and of course the jsapi - even better if you have a local copy -->
+<script>
+  var dojoConfig = { 
+    parseOnLoad: true,
+    async: true,
+    packages: [{
+      // name: 'extras', location: '/Users/gillesmath/webdev/odeskprojects/advertiser-exchange/public/jsapi-jasmine/src/extras'
+      name: 'extras', location: '/Users/gillesmath/webdev/odeskprojects/advertiser-exchange/public/assets/store/extras'
+    }],
+  };
+</script>
+<script src="http://serverapi.arcgisonline.com/jsapi/arcgis/3.5/"></script>
+<!-- <script data-dojo-config="async: 1" src="http://js.arcgis.com/3.6/"></script> -->
+
+<!-- <script type="text/javascript" src="src/extras/SampleModule.js"></script> -->
+<!-- <script type="text/javascript" src="src/extras/ClusterLayer.js"></script> -->
+<script type="text/javascript" src="src/arcgis.js"></script>
+<!-- <script type="text/javascript" src="../assets/store/extras/ClusterLayer.js"></script> -->
+<!-- <script type="text/javascript" src="../assets/store/arcgis.js"></script> -->
+
+<!-- Standard Jasmine stuff here loading up the helpers, source, specs and reporters -->
+
+  
+  <script type="text/javascript" src=".grunt/grunt-contrib-jasmine/phantom-polyfill.js"></script>
+  
+  <script type="text/javascript" src=".grunt/grunt-contrib-jasmine/jasmine.js"></script>
+  
+  <script type="text/javascript" src=".grunt/grunt-contrib-jasmine/jasmine-html.js"></script>
+  
+  <script type="text/javascript" src="lib/jquery-1.10.2.min.js"></script>
+  
+  <script type="text/javascript" src="lib/jasmine-jquery.js"></script>
+  
+  <script type="text/javascript" src="spec/javascripts/helpers/maphelper.js"></script>
+  
+  <script type="text/javascript" src="spec/javascripts/helpers/SpecHelper.js"></script>
+  
+  <script type="text/javascript" src="src/extras/ClusterLayer.js"></script>
+  
+  <script type="text/javascript" src="src/arcgis.js"></script>
+  
+  <script type="text/javascript" src="../assets/store/arcgis.js"></script>
+  
+  <script type="text/javascript" src="spec/javascripts/Arcgis.spec.js"></script>
+  
+  <script type="text/javascript" src="spec/javascripts/ClusterLayer.spec.js"></script>
+  
+  <script type="text/javascript" src="spec/javascripts/SampleModule.spec.js"></script>
+  
+  <script type="text/javascript" src=".grunt/grunt-contrib-jasmine/reporter.js"></script>
+  
+  <script type="text/javascript" src=".grunt/grunt-contrib-jasmine/jasmine-helper.js"></script>
+  
+
+</head>
+<body >
+<!-- Map Layer -->
+<div class="row" style="position:relative;" data-dojo-type="dijit.layout.BorderContainer"data-dojo-props="design:'headline',gutters:false">
+  <div id="map" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region:'center'">
+  </div>
+</div> <!--/Map Layer-->
+</body>
+</html>

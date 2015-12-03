@@ -1,0 +1,19 @@
+<% if spree_current_user %>
+  <li>
+    <span><strong>Account:</strong>&nbsp; <%= spree_current_user.email %></span>
+  </li>
+  <li style="position:relative">
+    <%= link_to_cart 'AD BUY' if store_menu? %>
+    <%= link_to 'Sign out', logout_path, :class => 'btn-u btn-large' %>
+    <%= render partial:"spree/shared/cart_info_popup" %>
+  </li>
+<% else %>
+  <li>
+    <%= link_to 'Advertiser Sign in', login_path, :class => 'btn-u btn-large visible-desktop'%>
+    <%= link_to 'Advertiser Sign in', login_path, :class => 'btn-u btn-small visible-tablet visible-phone'%>
+  </li>
+  <li>
+    <%= link_to 'Advertiser Sign up', spree_signup_path, :class => 'btn-u btn-large visible-desktop'%>
+    <%= link_to 'Advertiser Sign up', spree_signup_path, :class => 'btn-u btn-small visible-tablet visible-phone'%>
+  </li>
+<% end %>
